@@ -3,6 +3,15 @@ import { useProgress } from './hooks/useProgress'
 import * as W1 from './data/week1'
 import * as W2 from './data/week2'
 import * as W3 from './data/week3'
+import * as W4 from './data/week4'
+import * as W5 from './data/week5'
+import * as W6 from './data/week6'
+import * as W7 from './data/week7'
+import * as W8 from './data/week8'
+import * as W9 from './data/week9'
+import * as W10 from './data/week10'
+import * as W11 from './data/week11'
+import * as W12 from './data/week12'
 import HomeScreen   from './components/HomeScreen'
 import LearnScreen  from './components/LearnScreen'
 import GameAScreen  from './components/GameAScreen'
@@ -10,9 +19,18 @@ import GameBScreen  from './components/GameBScreen'
 import ResultScreen from './components/ResultScreen'
 
 const WEEK_DATA = {
-  1: { chars: W1.CHARS, lessons: W1.LESSONS, wordQs: W1.WORD_QS },
-  2: { chars: W2.CHARS, lessons: W2.LESSONS, wordQs: W2.WORD_QS },
-  3: { chars: W3.CHARS, lessons: W3.LESSONS, wordQs: W3.WORD_QS },
+  1:  { chars: W1.CHARS,  lessons: W1.LESSONS,  wordQs: W1.WORD_QS },
+  2:  { chars: W2.CHARS,  lessons: W2.LESSONS,  wordQs: W2.WORD_QS },
+  3:  { chars: W3.CHARS,  lessons: W3.LESSONS,  wordQs: W3.WORD_QS },
+  4:  { chars: W4.CHARS,  lessons: W4.LESSONS,  wordQs: W4.WORD_QS },
+  5:  { chars: W5.CHARS,  lessons: W5.LESSONS,  wordQs: W5.WORD_QS },
+  6:  { chars: W6.CHARS,  lessons: W6.LESSONS,  wordQs: W6.WORD_QS },
+  7:  { chars: W7.CHARS,  lessons: W7.LESSONS,  wordQs: W7.WORD_QS },
+  8:  { chars: W8.CHARS,  lessons: W8.LESSONS,  wordQs: W8.WORD_QS },
+  9:  { chars: W9.CHARS,  lessons: W9.LESSONS,  wordQs: W9.WORD_QS },
+  10: { chars: W10.CHARS, lessons: W10.LESSONS, wordQs: W10.WORD_QS },
+  11: { chars: W11.CHARS, lessons: W11.LESSONS, wordQs: W11.WORD_QS },
+  12: { chars: W12.CHARS, lessons: W12.LESSONS, wordQs: W12.WORD_QS },
 }
 
 export default function App() {

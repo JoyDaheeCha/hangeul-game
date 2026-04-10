@@ -1,6 +1,6 @@
 import { WEEK_META } from '../data/week1'
 
-const WEEKS = [1, 2, 3]
+const WEEKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 export default function HomeScreen({ week, onWeekChange, lessons, stars, totalStars, loading, onStart }) {
   const meta = WEEK_META[week]
@@ -14,7 +14,7 @@ export default function HomeScreen({ week, onWeekChange, lessons, stars, totalSt
       </div>
 
       {/* 주차 탭 */}
-      <div style={{ display: 'flex', padding: '10px 16px 0', gap: 8, borderBottom: '1px solid #f0ede8' }}>
+      <div style={{ display: 'flex', padding: '10px 16px 0', gap: 8, borderBottom: '1px solid #f0ede8', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         {WEEKS.map(w => {
           const m = WEEK_META[w]
           const active = w === week
@@ -23,8 +23,9 @@ export default function HomeScreen({ week, onWeekChange, lessons, stars, totalSt
               key={w}
               onClick={() => onWeekChange(w)}
               style={{
-                flex: 1,
-                padding: '9px 0 10px',
+                minWidth: 60,
+                flexShrink: 0,
+                padding: '9px 6px 10px',
                 fontSize: 13,
                 fontWeight: 600,
                 cursor: 'pointer',
