@@ -1,6 +1,6 @@
 import { WEEK_META } from '../data/week1'
 
-const WEEKS = [1, 2]
+const WEEKS = [1, 2, 3]
 
 export default function HomeScreen({ week, onWeekChange, lessons, stars, totalStars, loading, onStart }) {
   const meta = WEEK_META[week]
@@ -49,12 +49,12 @@ export default function HomeScreen({ week, onWeekChange, lessons, stars, totalSt
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 20px 20px', gap: 14, flex: 1 }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 64, color: meta.color, lineHeight: 1, marginBottom: 6 }}>
-            {week === 1 ? '가' : '사'}
+            {meta.displayChar}
           </div>
           <div style={{ fontSize: 17, fontWeight: 600, color: '#2c2c2a', marginBottom: 2 }}>
             {meta.title} — {meta.sub}
           </div>
-          <div style={{ fontSize: 12, color: '#888780' }}>자음 소리를 익혀봐요!</div>
+          <div style={{ fontSize: 12, color: '#888780' }}>{meta.desc}</div>
         </div>
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8 }}>

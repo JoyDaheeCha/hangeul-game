@@ -1,6 +1,7 @@
 export const WEEK_META = {
-  1: { title: '1주차', sub: 'ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ', color: '#534ab7', bg: '#eeedfe' },
-  2: { title: '2주차', sub: 'ㅅ + ㅏ ㅓ ㅗ ㅜ 모음', color: '#0f6e56', bg: '#e1f5ee' },
+  1: { title: '1주차', sub: 'ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ', color: '#534ab7', bg: '#eeedfe', displayChar: '가', desc: '자음 소리를 익혀봐요!' },
+  2: { title: '2주차', sub: 'ㅅ + ㅏ ㅓ ㅗ ㅜ 모음', color: '#0f6e56', bg: '#e1f5ee', displayChar: '사', desc: '자음·모음 소리를 익혀봐요!' },
+  3: { title: '3주차', sub: 'ㅇ ㅈ ㅊ ㅋ ㅌ ㅍ ㅎ + 모음', color: '#c4632a', bg: '#fde8df', displayChar: '아', desc: '나머지 자음·모음을 익혀봐요!' },
 }
 
 export const CHARS = [

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useProgress } from './hooks/useProgress'
 import * as W1 from './data/week1'
 import * as W2 from './data/week2'
+import * as W3 from './data/week3'
 import HomeScreen   from './components/HomeScreen'
 import LearnScreen  from './components/LearnScreen'
 import GameAScreen  from './components/GameAScreen'
@@ -11,6 +12,7 @@ import ResultScreen from './components/ResultScreen'
 const WEEK_DATA = {
   1: { chars: W1.CHARS, lessons: W1.LESSONS, wordQs: W1.WORD_QS },
   2: { chars: W2.CHARS, lessons: W2.LESSONS, wordQs: W2.WORD_QS },
+  3: { chars: W3.CHARS, lessons: W3.LESSONS, wordQs: W3.WORD_QS },
 }
 
 export default function App() {
