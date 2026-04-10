@@ -49,7 +49,7 @@ export default function GameAScreen({ chars, charIdxs, onBack, onFinish }) {
       else setQIdx(i => i + 1)
     } else {
       setFeedback('아쉬워요! 다시 해볼까요?')
-      setHintWord(`힌트: ${d.word}  ${d.emoji}`)
+      setHintWord(d.img ? `힌트: ${d.word}` : `힌트: ${d.word}  ${d.emoji}`)
       speak(correct)
     }
   }, [answered, d, score, qIdx, total, onFinish])

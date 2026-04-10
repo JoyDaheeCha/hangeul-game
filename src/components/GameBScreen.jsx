@@ -62,7 +62,7 @@ export default function GameBScreen({ wordQs, onBack, onFinish }) {
       <div style={{ display:'flex', flexDirection:'column', alignItems:'center', padding:'14px 20px 20px', flex:1, gap:10 }}>
         <div style={{ fontSize:12, color:'#888780' }}>이 그림의 이름은 무엇일까요?</div>
         <div style={{ width:130, height:130, borderRadius:22, display:'flex', alignItems:'center', justifyContent:'center', fontSize:60, background:'#f9f8f5', border:'1px solid #e0ddd6' }}>
-          {q.emoji}
+          {q.img ? <img src={q.img} alt={q.correct} style={{ width:90, height:90 }} /> : q.emoji}
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap:8, width:'100%' }}>
           {choices.map(c => (

@@ -31,7 +31,9 @@ export default function LearnScreen({ chars, onBack, onComplete }) {
           <div style={{ fontSize:72, color:'#3c3489', minWidth:80, textAlign:'center', lineHeight:1 }}>{d.c}</div>
           <div style={{ flex:1 }}>
             <div style={{ fontSize:17, fontWeight:600, color:'#534ab7', marginBottom:5 }}>"{d.sound}" 소리가 나요</div>
-            <div style={{ fontSize:14, color:'#3c3489', marginBottom:2 }}>{d.word}  {d.emoji}</div>
+            <div style={{ fontSize:14, color:'#3c3489', marginBottom:2, display:'flex', alignItems:'center', gap:6 }}>
+              {d.word}  {d.img ? <img src={d.img} alt={d.word} style={{ width:24, height:24 }} /> : d.emoji}
+            </div>
             <div style={{ fontSize:11, color:'#7f77dd' }}>{d.ex}</div>
           </div>
         </div>

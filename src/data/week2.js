@@ -1,7 +1,7 @@
 export const CHARS = [
   { c: 'ㅅ', sound: '스', word: '사자',  emoji: '🦁', ex: 'ㅅ → 사자에서 나는 소리' },
-  { c: 'ㅏ', sound: '아', word: '아이',  emoji: '👧', ex: 'ㅏ → 아이에서 나는 소리' },
-  { c: 'ㅓ', sound: '어', word: '어머니',emoji: '👩', ex: 'ㅓ → 어머니에서 나는 소리' },
+  { c: 'ㅏ', sound: '아', word: '아이',  emoji: '👧', img: '/images/child.svg',  ex: 'ㅏ → 아이에서 나는 소리' },
+  { c: 'ㅓ', sound: '어', word: '어머니',emoji: '👩', img: '/images/mother.svg', ex: 'ㅓ → 어머니에서 나는 소리' },
   { c: 'ㅗ', sound: '오', word: '오리',  emoji: '🦆', ex: 'ㅗ → 오리에서 나는 소리' },
   { c: 'ㅜ', sound: '우', word: '우유',  emoji: '🥛', ex: 'ㅜ → 우유에서 나는 소리' },
 ]
@@ -16,8 +16,8 @@ export const LESSONS = [
 
 export const WORD_QS = [
   { emoji: '🦁', correct: '사자',   wrong: ['아이', '오리', '우유'] },
-  { emoji: '👧', correct: '아이',   wrong: ['사자', '어머니', '오리'] },
-  { emoji: '👩', correct: '어머니', wrong: ['아이', '우유', '사자'] },
+  { emoji: '👧', img: '/images/child.svg',  correct: '아이',   wrong: ['사자', '어머니', '오리'] },
+  { emoji: '👩', img: '/images/mother.svg', correct: '어머니', wrong: ['아이', '우유', '사자'] },
   { emoji: '🦆', correct: '오리',   wrong: ['사자', '아이', '우유'] },
   { emoji: '🥛', correct: '우유',   wrong: ['오리', '어머니', '사자'] },
 ]
