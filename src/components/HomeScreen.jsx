@@ -2,60 +2,106 @@ import { WEEK_META } from '../data/week1'
 
 const WEEKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
-export default function HomeScreen({ week, onWeekChange, lessons, stars, totalStars, loading, onStart }) {
+const STAGES = [
+  { name: '1단계 — 자모 소리 자동화', weeks: [1, 2, 3, 4] },
+  { name: '2단계 — 받침 없는 글자 조합', weeks: [5, 6, 7, 8] },
+  { name: '3단계 — 받침 있는 글자', weeks: [9, 10, 11, 12] },
+]
+
+function getWeekStars(weekNum) {
+  try {
+    const v = localStorage.getItem(`hangeul-w${weekNum}-stars`)
+    if (!v) return 0
+    return JSON.parse(v).reduce((a, b) => a + b, 0)
+  } catch { return 0 }
+}
+
+export default function HomeScreen({ week, onWeekChange, onBackToWeeks, lessons, stars, totalStars, loading, onStart, onPrint }) {
+  if (!week) {
+    const allStars = WEEKS.reduce((sum, w) => sum + getWeekStars(w), 0)
+
+    return (
+      <div className="app">
+        <div className="topbar">
+          <span className="topbar-title">예서의 한글</span>
+          <div className="star-badge">⭐ {allStars}</div>
+        </div>
+
+        <div style={{ padding: '16px 20px 20px', flex: 1, overflowY: 'auto' }}>
+          {STAGES.map(stage => (
+            <div key={stage.name} style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#888780', marginBottom: 8, paddingLeft: 4 }}>
+                {stage.name}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {stage.weeks.map(w => {
+                  const m = WEEK_META[w]
+                  const weekStarCount = getWeekStars(w)
+                  return (
+                    <div
+                      key={w}
+                      onClick={() => onWeekChange(w)}
+                      style={{
+                        background: m.bg,
+                        border: `1px solid ${m.color}22`,
+                        borderRadius: 16,
+                        padding: '13px 15px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 12,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div style={{
+                        width: 44, height: 44, borderRadius: 12,
+                        background: `${m.color}18`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 22, fontWeight: 700, color: m.color, flexShrink: 0,
+                      }}>
+                        {m.displayChar}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: '#2c2c2a', marginBottom: 2 }}>{m.title}</div>
+                        <div style={{ fontSize: 11, color: '#888780' }}>{m.sub}</div>
+                      </div>
+                      {weekStarCount > 0
+                        ? <div style={{ fontSize: 12, color: m.color, fontWeight: 600 }}>⭐ {weekStarCount}</div>
+                        : <div style={{ fontSize: 18, color: '#b4b2a9' }}>›</div>
+                      }
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const meta = WEEK_META[week]
 
   return (
     <div className="app">
-      {/* 상단바 */}
       <div className="topbar">
-        <span className="topbar-title">예서의 한글</span>
+        <button className="back-btn" onClick={onBackToWeeks} style={{ fontSize: 18, padding: '0 8px 0 0' }}>‹</button>
+        <span className="topbar-title" style={{ flex: 1 }}>{meta.title} — {meta.sub}</span>
+        <button
+          onClick={onPrint}
+          title="단어 카드 인쇄"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, padding: '0 6px', lineHeight: 1 }}
+        >🖨️</button>
         <div className="star-badge">⭐ {loading ? '...' : totalStars}</div>
       </div>
 
-      {/* 주차 탭 */}
-      <div style={{ display: 'flex', padding: '10px 16px 0', gap: 8, borderBottom: '1px solid #f0ede8', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-        {WEEKS.map(w => {
-          const m = WEEK_META[w]
-          const active = w === week
-          return (
-            <button
-              key={w}
-              onClick={() => onWeekChange(w)}
-              style={{
-                minWidth: 60,
-                flexShrink: 0,
-                padding: '9px 6px 10px',
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: 'pointer',
-                border: 'none',
-                borderBottom: active ? `2.5px solid ${m.color}` : '2.5px solid transparent',
-                background: 'none',
-                color: active ? m.color : '#b4b2a9',
-                fontFamily: 'inherit',
-                transition: 'color 0.15s',
-              }}
-            >
-              {m.title}
-              <div style={{ fontSize: 10, fontWeight: 400, color: active ? m.color : '#d3d1c7', marginTop: 1 }}>
-                {m.sub}
-              </div>
-            </button>
-          )
-        })}
-      </div>
-
-      {/* 레슨 목록 */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 20px 20px', gap: 14, flex: 1 }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 64, color: meta.color, lineHeight: 1, marginBottom: 6 }}>
             {meta.displayChar}
           </div>
-          <div style={{ fontSize: 17, fontWeight: 600, color: '#2c2c2a', marginBottom: 2 }}>
-            {meta.title} — {meta.sub}
+          <div style={{ fontSize: 15, fontWeight: 600, color: '#2c2c2a', marginBottom: 2 }}>
+            {meta.desc}
           </div>
-          <div style={{ fontSize: 12, color: '#888780' }}>{meta.desc}</div>
         </div>
 
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8 }}>

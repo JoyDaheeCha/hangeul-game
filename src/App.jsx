@@ -17,6 +17,7 @@ import LearnScreen  from './components/LearnScreen'
 import GameAScreen  from './components/GameAScreen'
 import GameBScreen  from './components/GameBScreen'
 import ResultScreen from './components/ResultScreen'
+import PrintSheet   from './components/PrintSheet'
 
 const WEEK_DATA = {
   1:  { chars: W1.CHARS,  lessons: W1.LESSONS,  wordQs: W1.WORD_QS },
@@ -39,10 +40,12 @@ export default function App() {
 
   const { stars, totalStars, updateStars, loading } = useProgress(week, data.lessons.length)
 
-  const [screen, setScreen]           = useState({ name: 'home' })
+  const [screen, setScreen]           = useState({ name: 'week-list' })
   const [currentLesson, setCurrentLesson] = useState(0)
 
   const goHome = () => setScreen({ name: 'home' })
+  const goWeekList = () => setScreen({ name: 'week-list' })
+  const goPrint = () => setScreen({ name: 'print' })
 
   const handleWeekChange = (w) => {
     setWeek(w)
@@ -68,18 +71,33 @@ export default function App() {
     setScreen({ name: 'result', correct: data.chars.length, total: data.chars.length })
   }
 
+  if (screen.name === 'week-list') {
+    return (
+      <HomeScreen
+        week={null}
+        onWeekChange={handleWeekChange}
+      />
+    )
+  }
+
   if (screen.name === 'home') {
     return (
       <HomeScreen
         week={week}
         onWeekChange={handleWeekChange}
+        onBackToWeeks={goWeekList}
         lessons={data.lessons}
         stars={stars}
         totalStars={totalStars}
         loading={loading}
         onStart={startLesson}
+        onPrint={goPrint}
       />
     )
+  }
+
+  if (screen.name === 'print') {
+    return <PrintSheet week={week} chars={data.chars} onBack={goHome} />
   }
 
   if (screen.name === 'learn') {
