@@ -8,23 +8,41 @@ const STAGES = [
   { name: '3단계 — 받침 있는 글자', weeks: [9, 10, 11, 12] },
 ]
 
-function getWeekStars(weekNum) {
+function getWeekStars(weekNum, userId) {
   try {
-    const v = localStorage.getItem(`hangeul-w${weekNum}-stars`)
+    const v = localStorage.getItem(`hangeul-${userId}-w${weekNum}-stars`)
     if (!v) return 0
     return JSON.parse(v).reduce((a, b) => a + b, 0)
   } catch { return 0 }
 }
 
-export default function HomeScreen({ week, onWeekChange, onBackToWeeks, lessons, stars, totalStars, loading, onStart, onPrint }) {
+export default function HomeScreen({ week, onWeekChange, onBackToWeeks, lessons, stars, totalStars, loading, onStart, onPrint, userId = 'guest', displayName, onLogout }) {
   if (!week) {
-    const allStars = WEEKS.reduce((sum, w) => sum + getWeekStars(w), 0)
+    const allStars = WEEKS.reduce((sum, w) => sum + getWeekStars(w, userId), 0)
 
     return (
       <div className="app">
         <div className="topbar">
           <span className="topbar-title">예서의 한글</span>
-          <div className="star-badge">⭐ {allStars}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {displayName && (
+              <span style={{ fontSize: 12, color: '#5f5e5a', fontWeight: 600 }}>
+                {displayName.split(' ')[0]}
+              </span>
+            )}
+            {onLogout && (
+              <button
+                onClick={onLogout}
+                style={{
+                  fontSize: 11, color: '#888780', background: 'none', border: '1px solid #d3d1c7',
+                  borderRadius: 8, padding: '3px 8px', cursor: 'pointer', fontFamily: 'inherit',
+                }}
+              >
+                로그아웃
+              </button>
+            )}
+            <div className="star-badge">⭐ {allStars}</div>
+          </div>
         </div>
 
         <div style={{ padding: '16px 20px 20px', flex: 1, overflowY: 'auto' }}>
@@ -36,20 +54,15 @@ export default function HomeScreen({ week, onWeekChange, onBackToWeeks, lessons,
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {stage.weeks.map(w => {
                   const m = WEEK_META[w]
-                  const weekStarCount = getWeekStars(w)
+                  const weekStarCount = getWeekStars(w, userId)
                   return (
                     <div
                       key={w}
                       onClick={() => onWeekChange(w)}
                       style={{
-                        background: m.bg,
-                        border: `1px solid ${m.color}22`,
-                        borderRadius: 16,
-                        padding: '13px 15px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 12,
-                        cursor: 'pointer',
+                        background: m.bg, border: `1px solid ${m.color}22`,
+                        borderRadius: 16, padding: '13px 15px',
+                        display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer',
                       }}
                     >
                       <div style={{
@@ -114,16 +127,11 @@ export default function HomeScreen({ week, onWeekChange, onBackToWeeks, lessons,
                 key={lesson.id}
                 onClick={() => !locked && onStart(i)}
                 style={{
-                  background: '#f9f8f5',
-                  border: '1px solid #e8e5de',
-                  borderRadius: 16,
-                  padding: '13px 15px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
+                  background: '#f9f8f5', border: '1px solid #e8e5de',
+                  borderRadius: 16, padding: '13px 15px',
+                  display: 'flex', alignItems: 'center', gap: 12,
                   cursor: locked ? 'default' : 'pointer',
-                  opacity: locked ? 0.45 : 1,
-                  transition: 'background 0.12s',
+                  opacity: locked ? 0.45 : 1, transition: 'background 0.12s',
                 }}
               >
                 <div style={{ width: 42, height: 42, borderRadius: 12, background: lesson.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>

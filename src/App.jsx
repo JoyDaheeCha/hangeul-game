@@ -1,17 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from './supabase'
 import { useProgress } from './hooks/useProgress'
-import * as W1 from './data/week1'
-import * as W2 from './data/week2'
-import * as W3 from './data/week3'
-import * as W4 from './data/week4'
-import * as W5 from './data/week5'
-import * as W6 from './data/week6'
-import * as W7 from './data/week7'
-import * as W8 from './data/week8'
-import * as W9 from './data/week9'
+import * as W1  from './data/week1'
+import * as W2  from './data/week2'
+import * as W3  from './data/week3'
+import * as W4  from './data/week4'
+import * as W5  from './data/week5'
+import * as W6  from './data/week6'
+import * as W7  from './data/week7'
+import * as W8  from './data/week8'
+import * as W9  from './data/week9'
 import * as W10 from './data/week10'
 import * as W11 from './data/week11'
 import * as W12 from './data/week12'
+import LoginScreen  from './components/LoginScreen'
 import HomeScreen   from './components/HomeScreen'
 import LearnScreen  from './components/LearnScreen'
 import GameAScreen  from './components/GameAScreen'
@@ -35,17 +37,44 @@ const WEEK_DATA = {
 }
 
 export default function App() {
-  const [week, setWeek] = useState(1)
+  const [user, setUser]           = useState(null)
+  const [authLoading, setAuthLoading] = useState(!!supabase)
+
+  useEffect(() => {
+    if (!supabase) return
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null)
+      setAuthLoading(false)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+      setAuthLoading(false)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const userId      = user?.id ?? 'guest'
+  const displayName = user?.user_metadata?.name ?? user?.user_metadata?.full_name ?? user?.email ?? null
+
+  const [week, setWeek]   = useState(1)
   const data = WEEK_DATA[week]
 
-  const { stars, totalStars, updateStars, loading } = useProgress(week, data.lessons.length)
+  const { stars, totalStars, updateStars, loading } = useProgress(week, data.lessons.length, userId)
 
-  const [screen, setScreen]           = useState({ name: 'week-list' })
+  const [screen, setScreen]             = useState({ name: 'week-list' })
   const [currentLesson, setCurrentLesson] = useState(0)
 
-  const goHome = () => setScreen({ name: 'home' })
+  const goHome     = () => setScreen({ name: 'home' })
   const goWeekList = () => setScreen({ name: 'week-list' })
-  const goPrint = () => setScreen({ name: 'print' })
+  const goPrint    = () => setScreen({ name: 'print' })
+
+  const handleLogout = async () => {
+    await supabase?.auth.signOut()
+    setScreen({ name: 'week-list' })
+  }
 
   const handleWeekChange = (w) => {
     setWeek(w)
@@ -55,9 +84,9 @@ export default function App() {
   const startLesson = (lessonIdx) => {
     const lesson = data.lessons[lessonIdx]
     setCurrentLesson(lessonIdx)
-    if (lesson.type === 'learn')   setScreen({ name: 'learn' })
-    if (lesson.type === 'game-a')  setScreen({ name: 'game-a', chars: lesson.chars })
-    if (lesson.type === 'game-b')  setScreen({ name: 'game-b' })
+    if (lesson.type === 'learn')  setScreen({ name: 'learn' })
+    if (lesson.type === 'game-a') setScreen({ name: 'game-a', chars: lesson.chars })
+    if (lesson.type === 'game-b') setScreen({ name: 'game-b' })
   }
 
   const handleFinish = async (correct, total) => {
@@ -71,11 +100,24 @@ export default function App() {
     setScreen({ name: 'result', correct: data.chars.length, total: data.chars.length })
   }
 
+  if (authLoading) {
+    return (
+      <div className="app" style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ fontSize: 40 }}>⏳</div>
+      </div>
+    )
+  }
+
+  if (supabase && !user) return <LoginScreen />
+
   if (screen.name === 'week-list') {
     return (
       <HomeScreen
         week={null}
         onWeekChange={handleWeekChange}
+        userId={userId}
+        displayName={displayName}
+        onLogout={user ? handleLogout : null}
       />
     )
   }
@@ -92,6 +134,9 @@ export default function App() {
         loading={loading}
         onStart={startLesson}
         onPrint={goPrint}
+        userId={userId}
+        displayName={displayName}
+        onLogout={user ? handleLogout : null}
       />
     )
   }
