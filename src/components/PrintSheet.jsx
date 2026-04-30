@@ -76,47 +76,37 @@ function CardModal({ char, meta, onClose }) {
       onClick={onClose}
       style={{
         position: 'fixed', inset: 0, zIndex: 100,
-        background: 'rgba(0,0,0,0.72)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: 24,
+        background: meta.bg,
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        gap: '2vmin',
       }}
     >
-      <div
-        onClick={e => e.stopPropagation()}
+      <button
+        onClick={onClose}
         style={{
-          background: meta.bg,
-          border: `4px solid ${meta.color}`,
-          borderRadius: 28,
-          padding: '48px 40px 40px',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
-          width: '100%', maxWidth: 380,
-          textAlign: 'center',
-          position: 'relative',
+          position: 'absolute', top: 16, right: 16,
+          width: 40, height: 40, borderRadius: '50%',
+          background: `${meta.color}22`, border: 'none',
+          color: meta.color, fontSize: 20, fontWeight: 700,
+          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0,
         }}
-      >
-        <button
-          onClick={onClose}
-          style={{
-            position: 'absolute', top: 14, right: 14,
-            width: 32, height: 32, borderRadius: '50%',
-            background: `${meta.color}22`, border: 'none',
-            color: meta.color, fontSize: 18, fontWeight: 700,
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}
-        >✕</button>
+      >✕</button>
 
-        <div style={{ fontSize: 'min(30vw, 140px)', lineHeight: 1.1 }}>{char.emoji}</div>
-        <div style={{ fontSize: 'min(26vw, 120px)', fontWeight: 900, lineHeight: 1, color: meta.color }}>
-          {char.c}
-        </div>
-        <div style={{
-          fontSize: 22, fontWeight: 700,
-          background: `${meta.color}18`, color: meta.color,
-          borderRadius: 10, padding: '4px 16px',
-        }}>
-          [{char.sound}]
-        </div>
-        <div style={{ fontSize: 36, fontWeight: 700, color: '#2c2c2a' }}>{char.word}</div>
+      <div style={{ fontSize: 'clamp(100px, 28vmin, 220px)', lineHeight: 1 }}>{char.emoji}</div>
+      <div style={{ fontSize: 'clamp(90px, 24vmin, 200px)', fontWeight: 900, lineHeight: 1, color: meta.color }}>
+        {char.c}
+      </div>
+      <div style={{
+        fontSize: 'clamp(18px, 5vmin, 36px)', fontWeight: 700,
+        background: `${meta.color}22`, color: meta.color,
+        borderRadius: 12, padding: '0.5vmin 2.5vmin',
+      }}>
+        [{char.sound}]
+      </div>
+      <div style={{ fontSize: 'clamp(28px, 8vmin, 64px)', fontWeight: 700, color: '#2c2c2a' }}>
+        {char.word}
       </div>
     </div>
   )
