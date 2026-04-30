@@ -13,8 +13,9 @@ import * as W9  from './data/week9'
 import * as W10 from './data/week10'
 import * as W11 from './data/week11'
 import * as W12 from './data/week12'
-import LoginScreen  from './components/LoginScreen'
-import HomeScreen   from './components/HomeScreen'
+import LoginScreen       from './components/LoginScreen'
+import HomeScreen        from './components/HomeScreen'
+import TamagotchiScreen  from './components/TamagotchiScreen'
 import LearnScreen  from './components/LearnScreen'
 import GameAScreen  from './components/GameAScreen'
 import GameBScreen  from './components/GameBScreen'
@@ -70,6 +71,7 @@ export default function App() {
   const goHome     = () => setScreen({ name: 'home' })
   const goWeekList = () => setScreen({ name: 'week-list' })
   const goPrint    = () => setScreen({ name: 'print' })
+  const goPet      = () => setScreen({ name: 'pet' })
 
   const handleLogout = async () => {
     await supabase?.auth.signOut()
@@ -110,6 +112,10 @@ export default function App() {
 
   if (supabase && !user) return <LoginScreen />
 
+  if (screen.name === 'pet') {
+    return <TamagotchiScreen userId={userId} onBack={goWeekList} />
+  }
+
   if (screen.name === 'week-list') {
     return (
       <HomeScreen
@@ -118,6 +124,7 @@ export default function App() {
         userId={userId}
         displayName={displayName}
         onLogout={user ? handleLogout : null}
+        onPetOpen={goPet}
       />
     )
   }

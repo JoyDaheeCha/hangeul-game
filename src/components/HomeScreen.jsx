@@ -1,8 +1,9 @@
 import { WEEK_META } from '../data/week1'
+import { STAGES as PET_STAGES, getTotalStarsEarned, loadPetState, getStageIndex } from '../hooks/usePet'
 
 const WEEKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
-const STAGES = [
+const WEEK_STAGES = [
   { name: '1단계 — 자모 소리 자동화', weeks: [1, 2, 3, 4] },
   { name: '2단계 — 받침 없는 글자 조합', weeks: [5, 6, 7, 8] },
   { name: '3단계 — 받침 있는 글자', weeks: [9, 10, 11, 12] },
@@ -16,9 +17,15 @@ function getWeekStars(weekNum, userId) {
   } catch { return 0 }
 }
 
-export default function HomeScreen({ week, onWeekChange, onBackToWeeks, lessons, stars, totalStars, loading, onStart, onPrint, userId = 'guest', displayName, onLogout }) {
+export default function HomeScreen({ week, onWeekChange, onBackToWeeks, lessons, stars, totalStars, loading, onStart, onPrint, userId = 'guest', displayName, onLogout, onPetOpen }) {
   if (!week) {
     const allStars = WEEKS.reduce((sum, w) => sum + getWeekStars(w, userId), 0)
+    const petState = loadPetState(userId)
+    const petTotal = getTotalStarsEarned(userId)
+    const petStageIdx = getStageIndex(petTotal)
+    const petStage = PET_STAGES[petStageIdx]
+    const petAvailable = petTotal - (petState.totalStarSpent ?? 0)
+    const petHungry = petState.hunger < 50
 
     return (
       <div className="app">
@@ -46,7 +53,40 @@ export default function HomeScreen({ week, onWeekChange, onBackToWeeks, lessons,
         </div>
 
         <div style={{ padding: '16px 20px 20px', flex: 1, overflowY: 'auto' }}>
-          {STAGES.map(stage => (
+          <div
+            onClick={onPetOpen}
+            style={{
+              background: '#fffbf0',
+              border: `1.5px solid ${petHungry ? '#fca5a522' : '#f0a30a22'}`,
+              ...(petHungry ? { boxShadow: '0 0 0 1.5px #fca5a5' } : {}),
+              borderRadius: 16, padding: '12px 15px', marginBottom: 12,
+              display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer',
+            }}
+          >
+            <div style={{ fontSize: 36, lineHeight: 1, flexShrink: 0 }}>{petStage.emoji}</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#2c2c2a', marginBottom: 4 }}>
+                내 다마고치 · {petStage.name}
+              </div>
+              <div style={{ display: 'flex', gap: 4 }}>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <div key={i} style={{
+                    width: 12, height: 12, borderRadius: '50%',
+                    background: i < Math.round((petState.hunger / 100) * 5) ? '#ef4444' : '#e5e7eb',
+                  }} />
+                ))}
+              </div>
+              {petHungry && (
+                <div style={{ fontSize: 11, color: '#ef4444', marginTop: 3 }}>(배고파요!)</div>
+              )}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+              <div style={{ fontSize: 12, color: '#854f0b', fontWeight: 600 }}>⭐ {petAvailable}</div>
+              <div style={{ fontSize: 18, color: '#b4b2a9' }}>›</div>
+            </div>
+          </div>
+
+          {WEEK_STAGES.map(stage => (
             <div key={stage.name} style={{ marginBottom: 20 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#888780', marginBottom: 8, paddingLeft: 4 }}>
                 {stage.name}
