@@ -41,5 +41,6 @@ body { background: #f5f4f0; display: flex; justify-content: center; align-items:
   .print-preview { padding: 0; gap: 0; display: block; }
   .print-sheet { width: 100%; box-shadow: none; border-radius: 0; padding: 0; }
   .print-sheet + .print-sheet { break-before: page; }
+  .print-card { cursor: default !important; }
   @page { size: A4 portrait; margin: 12mm; }
 }

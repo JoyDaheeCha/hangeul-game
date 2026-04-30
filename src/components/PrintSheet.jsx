@@ -70,10 +70,63 @@ function ScaleButton({ onClick, disabled, children }) {
   )
 }
 
+function CardModal({ char, meta, onClose }) {
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 100,
+        background: 'rgba(0,0,0,0.72)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 24,
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: meta.bg,
+          border: `4px solid ${meta.color}`,
+          borderRadius: 28,
+          padding: '48px 40px 40px',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
+          width: '100%', maxWidth: 380,
+          textAlign: 'center',
+          position: 'relative',
+        }}
+      >
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute', top: 14, right: 14,
+            width: 32, height: 32, borderRadius: '50%',
+            background: `${meta.color}22`, border: 'none',
+            color: meta.color, fontSize: 18, fontWeight: 700,
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >✕</button>
+
+        <div style={{ fontSize: 'min(30vw, 140px)', lineHeight: 1.1 }}>{char.emoji}</div>
+        <div style={{ fontSize: 'min(26vw, 120px)', fontWeight: 900, lineHeight: 1, color: meta.color }}>
+          {char.c}
+        </div>
+        <div style={{
+          fontSize: 22, fontWeight: 700,
+          background: `${meta.color}18`, color: meta.color,
+          borderRadius: 10, padding: '4px 16px',
+        }}>
+          [{char.sound}]
+        </div>
+        <div style={{ fontSize: 36, fontWeight: 700, color: '#2c2c2a' }}>{char.word}</div>
+      </div>
+    </div>
+  )
+}
+
 export default function PrintSheet({ week, chars, onBack }) {
   const meta = WEEK_META[week]
   const [cardsPerPage, setCardsPerPage] = useState(6)
   const [scale, setScale] = useState(1.0)
+  const [focusedChar, setFocusedChar] = useState(null)
 
   const option = OPTIONS.find(o => o.value === cardsPerPage)
   const base = SIZES[cardsPerPage]
@@ -98,6 +151,10 @@ export default function PrintSheet({ week, chars, onBack }) {
 
   return (
     <div className="print-page">
+      {focusedChar && (
+        <CardModal char={focusedChar} meta={meta} onClose={() => setFocusedChar(null)} />
+      )}
+
       <div className="print-controls no-print">
         <button className="back-btn" onClick={onBack} style={{ fontSize: 18, whiteSpace: 'nowrap' }}>
           ‹ 돌아가기
@@ -155,8 +212,9 @@ export default function PrintSheet({ week, chars, onBack }) {
               {pageChars.map(char => (
                 <div
                   key={char.c}
-                  className="print-card"
-                  style={{ borderColor: meta.color, background: meta.bg, padding: sz.cardPad }}
+                  className="print-card no-print-interact"
+                  onClick={() => setFocusedChar(char)}
+                  style={{ borderColor: meta.color, background: meta.bg, padding: sz.cardPad, cursor: 'pointer' }}
                 >
                   <div style={{ fontSize: sz.emoji, lineHeight: 1.1 }}>{char.emoji}</div>
                   <div style={{ fontSize: sz.char, fontWeight: 900, lineHeight: 1, color: meta.color }}>{char.c}</div>
